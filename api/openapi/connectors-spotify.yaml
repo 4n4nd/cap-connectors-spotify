@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: connectors-spotify
+  version: 0.1.0
+paths:
+  /healthz:
+    get:
+      responses:
+        '200': { description: OK }
+  /readyz:
+    get:
+      responses:
+        '200': { description: OK }
+  /v1/spotify/devices:list:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id: { type: string }
+              required: [user_id]
+      responses:
+        '200':
+          description: OK
+  /v1/spotify/playback:transfer:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id: { type: string }
+                device_id: { type: string }
+                play_now: { type: boolean }
+              required: [user_id, device_id]
+      responses:
+        '200': { description: OK }
+  /v1/spotify/queue:append:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id: { type: string }
+                device_id: { type: string }
+                uri: { type: string }
+              required: [user_id, device_id, uri]
+      responses:
+        '200': { description: OK }
+  /v1/spotify/tracks:search:
+    get:
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+        - name: market
+          in: query
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /v1/spotify/tracks:by-isrc:
+    get:
+      parameters:
+        - name: isrc
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
